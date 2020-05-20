@@ -1,55 +1,26 @@
-makeCacheMatrix <- function(x = matrix()) 
-{
-  # initialize the matrix to NULL
-  inverse  <- NULL
-  set <- function(y) 
-  {
+makeCacheMatrix <- function(x = matrix()) {
+  j <- NULL##assigning null
+  set <- function(y){##setting the function
     x <<- y
-    inverse <<- NULL
+    j <<- NULL
   }
-  get <- function() 
-  {
-    x
-  }
-  
-  setinverse <- function(inv)
-  { 
-    inverse <<- inv
-  }
-  getinverse <- function()
-  {
-    inverse
-  } 
-  list(set = set, get = get,
-       setinverse = setinverse,
-       getinverse = getinverse)
+  get <- function()x
+  setInverse <- function(inverse) j <<- inverse
+  getInverse <- function() j 
+  list(set = set, get = get, 
+       setInverse = setInverse, 
+       getInverse = getInverse)
 }
 
-cacheSolve <- function(x, ...) 
-{
-  inverse <- x$getinverse()
-  
-  if(!is.null(inverse)) 
-  {
-    message("getting cached data")
-    return(inverse)
+cacheSolve <- function(x, ...) {
+  ## Return a matrix that is the inverse of 'x'
+  j <- x$getInverse()
+  if(!is.null(j)){##check null
+    message("getting cached data")##user message
+    return(j)
   }
-  
-  data <- x$get()
-  inverse <- solve(data, ...)
-  x$setinverse(inverse)
-  inverse
-}
-
-test <- function() 
-{
-  my_matrix <- makeCacheMatrix(matrix(1:4, 2, 2))
-  my_matrix$get()
-  my_matrix$getinverse()
-  cacheSolve(my_matrix)
-  my_matrix$set(matrix(c(0,5,99,66), nrow=2, ncol=2)) # Modify existing matrix
-  cacheSolve(my_matrix)   # Computes, caches, and returns new matrix inverse
-  my_matrix$get()         # Returns matrix
-  my_matrix$getinverse()  # Returns matrix inverse    
-  my_matrix$get() %*% my_matrix$getinverse() # returns the identity matrix
+  mat <- x$get()
+  j <- solve(mat,...)
+  x$setInverse(j)
+  j
 }
